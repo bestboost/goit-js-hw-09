@@ -1,42 +1,37 @@
-// Задание 1 - переключатель цветов
-// В HTML есть кнопки «Start» и «Stop».
-
-// <button type="button" data-start>Start</button>
-// <button type="button" data-stop>Stop</button>
-
-// Напиши скрипт, который после нажатия кнопки «Start», раз в секунду меняет цвет фона <body> на 
-// случайное значение используя инлайн стиль. При нажатии на кнопку «Stop», изменение цвета фона должно
-//  останавливаться.
-
-// ВНИМАНИЕ
-// Учти, на кнопку «Start» можно нажать бесконечное количество раз. Сделай так, чтобы пока изменение 
-// темы запушено, кнопка «Start» была не активна (disabled).
-
 const startBtn = document.querySelector('button[data-start]');
 const stopBtn = document.querySelector('button[data-stop]');
 
-// let debounce = _.debounce(onBodyColor, 1000, {
-//     leading: true,
-//   });
+const changeColor = {
+  intervalId: null,
+  isActive: false,
 
-startBtn.addEventListener('click', debounce(() => {
-    console.log("Scroll handler call after 300ms pause");
-  }, 300));
-stopBtn.addEventListener('click', () => console.log('stop click'));
+  start() {
 
-// function onBodyColor() {
-   
-//    const colorChangerFunction = getRandomHexColor();  
-//    document.body.style.backgroundColor = colorChangerFunction;     
-   
-// };
+    if(this.isActive) {
+      return;
+    }
+     this.isActive = true,
 
+  this.intervalId = setInterval(() => {
 
-// function onStopBtnClick() {
-    
-// return onBodyColor();
+       const colorChangerFunction = getRandomHexColor();  
+   document.body.style.backgroundColor = colorChangerFunction;  
 
-// };
+  }, 1000)
+ 
+},
+
+  stop() {
+      this.isActive = false;
+         clearInterval(this.intervalId);
+  },
+};
+
+startBtn.addEventListener('click',(() => { changeColor.start(); 
+  }));
+stopBtn.addEventListener('click', (() => { changeColor.stop();
+  }));
+
 
 // Для генерации случайного цвета используй функцию getRandomHexColor.
 
