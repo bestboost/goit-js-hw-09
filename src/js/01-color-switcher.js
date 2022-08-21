@@ -1,28 +1,45 @@
 const startBtn = document.querySelector('button[data-start]');
 const stopBtn = document.querySelector('button[data-stop]');
 
+
+startBtn.style.fontSize = "25px";
+startBtn.style.padding = "10px 20px";
+startBtn.style.margin = "200px 8px 200px 500px";
+
+stopBtn.style.fontSize = "25px";
+stopBtn.style.padding = "10px 20px";
+stopBtn.disabled = true;
+
 const changeColor = {
   intervalId: null,
-  isActive: false,
-
+  
   start() {
 
-    if(this.isActive) {
+    if(startBtn.disabled) {
+      
       return;
     }
-     this.isActive = true,
+   
+     startBtn.disabled = true,
+     stopBtn.disabled = false;
 
   this.intervalId = setInterval(() => {
 
        const colorChangerFunction = getRandomHexColor();  
    document.body.style.backgroundColor = colorChangerFunction;  
 
+   startBtn.style.backgroundColor = colorChangerFunction;
+   
+   stopBtn.style.backgroundColor = colorChangerFunction;
+
   }, 1000)
  
 },
 
   stop() {
-      this.isActive = false;
+    
+      stopBtn.disabled = true;
+      startBtn.disabled = false,
          clearInterval(this.intervalId);
   },
 };
