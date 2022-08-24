@@ -31,10 +31,6 @@
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
-
-const inputTextarea = document.querySelector('input#datetime-picker');
-const startButton = document.querySelector('[data-start]');
-
 // Style
 const timerArea = document.querySelector('.timer');
 const timerItems = document.querySelectorAll('.field')
@@ -74,12 +70,7 @@ timerValuesStyle();
 timerLabelsStyle();
 
 
-// Timer code
-const date = new Date;
-console.log(date);
-
-function flatpickr(inputTextarea, options) {
-
+// liba
 const options = {
     enableTime: true,
     time_24hr: true,
@@ -87,8 +78,105 @@ const options = {
     minuteIncrement: 1,
     onClose(selectedDates) {
       console.log(selectedDates[0]);
+      if (selectedDates[0] < timeNow) {
+      
+        alert("Please choose a date in the future");
+    };
+
+    if (selectedDates[0] > timeNow) {
+      
+        startButton.disabled = false;
+    };
+    
+  
     },
+    
+
+};
+
+flatpickr('input#datetime-picker', options)
+
+
+
+
+
+// Timer code
+const timeNow = new Date;
+console.log('timeNow    ',timeNow)
+
+// const inputTextarea = document.querySelector('input');
+const startButton = document.querySelector('[data-start]');
+startButton.disabled = true;
+
+// inputTextarea.addEventListener('input', onUserDate);
+
+// function onUserDate() {
+    // console.log(onUserDate)
+// }
+
+
+
+
+const timer = {
+    start() {
+        const startNow = Date.now();
+        startButton.disabled = true;
+
+    setInterval(() => {
+      const currentTime = Date.now();
+
+      const deltaTime = currentTime - startNow;
+      const { days, hours, minutes, seconds } = convertMs(deltaTime)
+      console.log(`${ days}:${ hours}:${ minutes}:${ seconds }`)
+    }, 1000);
+   
+  },
+
+  stop () {
+    // конечная дата, то есть 00:00:00:00
+  }
+
+};
+startButton.disabled = true;
+
+startButton.addEventListener('click', timer.start);
+
+// clock face
+const day = document.querySelector('[data-days]');
+const hour = document.querySelector('[data-hours]');
+const minute = document.querySelector('[data-minutes]');
+const second = document.querySelector('[data-seconds]');
+
+function updateClockface({ days, hours, minutes, seconds }) {
+    day = `${days}`;
+    hour = `${hours}`;
+    minute = `${minutes}`;
+    second = `${seconds}`;
 }
 
-  };
-  flatpickr();
+
+function addLeadingZero(value) {
+    return String(value).padStart(2, '0');
+}
+
+//   Для подсчета значений
+function convertMs(ms) {
+    // Number of milliseconds per unit of time
+    const second = 1000;
+    const minute = second * 60;
+    const hour = minute * 60;
+    const day = hour * 24;
+    
+    const days = addLeadingZero(Math.floor(ms / day));
+    const hours = addLeadingZero(Math.floor((ms % day) / hour));
+    const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
+    const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
+  
+    return { days, hours, minutes, seconds };
+  }
+  
+//   console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+//   console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
+//   console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+
+
