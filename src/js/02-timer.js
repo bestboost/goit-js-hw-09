@@ -27,3 +27,68 @@
 //     <span class="label">Seconds</span>
 //   </div>
 // </div>
+
+import flatpickr from "flatpickr";
+
+import "flatpickr/dist/flatpickr.min.css";
+
+const inputTextarea = document.querySelector('input#datetime-picker');
+const startButton = document.querySelector('[data-start]');
+
+// Style
+const timerArea = document.querySelector('.timer');
+const timerItems = document.querySelectorAll('.field')
+const timerValues = document.querySelectorAll('.value')
+const timerLabels = document.querySelectorAll('.label')
+
+timerArea.style.display = "flex";
+
+const timerItemsStyle = () => {
+    timerItems.forEach(timerItem => {
+        timerItem.style.display = "flex";
+        timerItem.style.flexDirection = "column";
+        timerItem.style.padding = "5px 10px"
+   
+    })
+    
+}
+
+const timerValuesStyle = () => {
+    timerValues.forEach(timerValue => {
+        timerValue.style.fontSize = "30px";
+       
+    })
+ 
+}
+const timerLabelsStyle = () => {
+    timerLabels.forEach(timerLabel => {
+        timerLabel.style.textTransform = "uppercase";
+        timerLabel.style.fontSize = "12px";
+       
+    })
+ 
+}
+
+timerItemsStyle();
+timerValuesStyle();
+timerLabelsStyle();
+
+
+// Timer code
+const date = new Date;
+console.log(date);
+
+function flatpickr(inputTextarea, options) {
+
+const options = {
+    enableTime: true,
+    time_24hr: true,
+    defaultDate: new Date(),
+    minuteIncrement: 1,
+    onClose(selectedDates) {
+      console.log(selectedDates[0]);
+    },
+}
+
+  };
+  flatpickr();
