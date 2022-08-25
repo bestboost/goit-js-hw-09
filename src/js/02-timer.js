@@ -1,33 +1,3 @@
-// Задание 2 - таймер обратного отсчета
-// Напиши скрипт таймера, который ведёт обратный отсчет до определенной даты. Такой таймер может использоваться 
-//  в блогах и интернет-магазинах, страницах регистрации событий, во время технического обслуживания и т. д.
-
-// Элементы интефрейса
-// В HTML есть готовая разметка таймера, поля выбора конечной даты и кнопки, 
-// при клике по которой таймер должен запускаться. Добавь минимальное оформление элементов интерфейса.
-
-// <input type="text" id="datetime-picker" />
-// <button type="button" data-start>Start</button>
-
-// <div class="timer">
-//   <div class="field">
-//     <span class="value" data-days>00</span>
-//     <span class="label">Days</span>
-//   </div>
-//   <div class="field">
-//     <span class="value" data-hours>00</span>
-//     <span class="label">Hours</span>
-//   </div>
-//   <div class="field">
-//     <span class="value" data-minutes>00</span>
-//     <span class="label">Minutes</span>
-//   </div>
-//   <div class="field">
-//     <span class="value" data-seconds>00</span>
-//     <span class="label">Seconds</span>
-//   </div>
-// </div>
-
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
@@ -86,41 +56,41 @@ const options = {
     minuteIncrement: 1,
     onClose(selectedDates) {
       console.log(selectedDates[0]);
-      if (selectedDates[0] < timeNow) {
-      
-        alert("Please choose a date in the future");
-    };
 
-    if (selectedDates[0] > timeNow) {
-      
-        startButton.disabled = false;
-    };
-    
-  
+         
     },
-    
-
+  
 };
 
 flatpickr('input#datetime-picker', options)
 
 
 
-
-
 // Timer code
-const timeNow = new Date;
-console.log('timeNow    ',timeNow)
+const timeNow = Date.now();
 
-// const inputTextarea = document.querySelector('input');
+const inputTextarea = document.querySelector('input');
 const startButton = document.querySelector('[data-start]');
+
 startButton.disabled = true;
 
-// inputTextarea.addEventListener('input', onUserDate);
+inputTextarea.addEventListener('input', takeTargetDate)
+let targetDate = '';
+function takeTargetDate (event) {
+    userDate = event.currentTarget.value;
+    targetDate = (Date.parse(userDate))
 
-// function onUserDate() {
-    // console.log(onUserDate)
-// }
+  if (targetDate <= timeNow) {
+      
+    alert("Please choose a date in the future");
+};
+
+if (targetDate > timeNow) {
+  
+    startButton.disabled = false;
+};
+    };
+    
 
 class Timer {
     constructor({onTick}) {
@@ -134,13 +104,14 @@ class Timer {
         if(this.isActive) {
             return;
         }
-        const startNow = Date.now();
+      
         startButton.disabled = true;
         this.isActive = true;
-
+        console.log(targetDate)
     this.intervalId = setInterval(() => {
       const currentTime = Date.now();
-      const deltaTime = currentTime - startNow;
+      const deltaTime = targetDate - currentTime;
+      console.log(deltaTime)
       const countTime = this.convertMs(deltaTime);
 
       this.onTick(countTime)
@@ -148,13 +119,14 @@ class Timer {
    
   };
 
-//   stop () {
-    // конечная дата, то есть 00:00:00:00
-    // clearInterval(this.intervalId);
-    // this.isActive = false,
-    // const countTime = this.convertMs(deltaTime);
-    // this.onTick(countTime)
-//   }
+  stop () {
+    //  if(deltaTime <= 0) {
+    clearInterval(this.intervalId);
+    this.isActive = false;
+    const countTime = this.convertMs(deltaTime);
+    this.onTick(countTime)
+    //  };
+  }
 
   //   Для подсчета значений
 convertMs(ms) {
