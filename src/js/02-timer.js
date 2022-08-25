@@ -31,6 +31,14 @@
 import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
+
+
+// clock face
+const day = document.querySelector('[data-days]');
+const hour = document.querySelector('[data-hours]');
+const minute = document.querySelector('[data-minutes]');
+const second = document.querySelector('[data-seconds]');
+
 // Style
 const timerArea = document.querySelector('.timer');
 const timerItems = document.querySelectorAll('.field')
@@ -114,69 +122,81 @@ startButton.disabled = true;
     // console.log(onUserDate)
 // }
 
+class Timer {
+    constructor({onTick}) {
+        this.intervalId = null;
+        this.isActive = false;
+        this.onTick = onTick;
 
+    }
 
-
-const timer = {
     start() {
+        if(this.isActive) {
+            return;
+        }
         const startNow = Date.now();
         startButton.disabled = true;
+        this.isActive = true;
 
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       const currentTime = Date.now();
-
       const deltaTime = currentTime - startNow;
-      const { days, hours, minutes, seconds } = convertMs(deltaTime)
-      console.log(`${ days}:${ hours}:${ minutes}:${ seconds }`)
+      const countTime = this.convertMs(deltaTime);
+
+      this.onTick(countTime)
     }, 1000);
    
-  },
+  };
 
-  stop () {
+//   stop () {
     // конечная дата, то есть 00:00:00:00
-  }
+    // clearInterval(this.intervalId);
+    // this.isActive = false,
+    // const countTime = this.convertMs(deltaTime);
+    // this.onTick(countTime)
+//   }
 
-};
-startButton.disabled = true;
-
-startButton.addEventListener('click', timer.start);
-
-// clock face
-const day = document.querySelector('[data-days]');
-const hour = document.querySelector('[data-hours]');
-const minute = document.querySelector('[data-minutes]');
-const second = document.querySelector('[data-seconds]');
-
-function updateClockface({ days, hours, minutes, seconds }) {
-    day = `${days}`;
-    hour = `${hours}`;
-    minute = `${minutes}`;
-    second = `${seconds}`;
-}
-
-
-function addLeadingZero(value) {
-    return String(value).padStart(2, '0');
-}
-
-//   Для подсчета значений
-function convertMs(ms) {
+  //   Для подсчета значений
+convertMs(ms) {
     // Number of milliseconds per unit of time
     const second = 1000;
     const minute = second * 60;
     const hour = minute * 60;
     const day = hour * 24;
     
-    const days = addLeadingZero(Math.floor(ms / day));
-    const hours = addLeadingZero(Math.floor((ms % day) / hour));
-    const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
-    const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
+    const days = this.addLeadingZero(Math.floor(ms / day));
+    const hours = this.addLeadingZero(Math.floor((ms % day) / hour));
+    const minutes = this.addLeadingZero(Math.floor(((ms % day) % hour) / minute));
+    const seconds = this.addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
   
     return { days, hours, minutes, seconds };
   }
-  
-//   console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-//   console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-//   console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
+
+  addLeadingZero(value) {
+    return String(value).padStart(2, '0');
+}
+
+}
+
+
+const timer = new Timer({
+onTick: updateClockface
+});
+
+startButton.addEventListener('click', timer.start.bind(timer));
+startButton.disabled = true;
+
+function updateClockface({ days, hours, minutes, seconds }) {
+    day.textContent = `${days}`;
+    hour.textContent  = `${hours}`;
+    minute.textContent  = `${minutes}`;
+    second.textContent  = `${seconds}`;
+}
+
+
+
+
+
+
 
 
