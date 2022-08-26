@@ -3,10 +3,12 @@ const stopBtn = document.querySelector('button[data-stop]');
 
 
 startBtn.style.fontSize = "25px";
+startBtn.style.textTransform = "uppercase";
 startBtn.style.padding = "10px 20px";
 startBtn.style.margin = "200px 8px 200px 500px";
 
 stopBtn.style.fontSize = "25px";
+stopBtn.style.textTransform = "uppercase";
 stopBtn.style.padding = "10px 20px";
 stopBtn.disabled = true;
 
