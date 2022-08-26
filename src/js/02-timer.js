@@ -72,7 +72,7 @@ const timeNow = Date.now();
 const inputTextarea = document.querySelector('input');
 const startButton = document.querySelector('[data-start]');
 
-startButton.disabled = true;
+startButton.disabled = false;
 
 inputTextarea.addEventListener('input', takeTargetDate)
 let targetDate = '';
@@ -107,7 +107,7 @@ class Timer {
       
         startButton.disabled = true;
         this.isActive = true;
-        console.log(targetDate)
+
     this.intervalId = setInterval(() => {
       const currentTime = Date.now();
       const deltaTime = targetDate - currentTime;
@@ -115,17 +115,17 @@ class Timer {
       const countTime = this.convertMs(deltaTime);
 
       this.onTick(countTime)
-    }, 1000);
-   
-  };
 
-  stop () {
-    //  if(deltaTime <= 0) {
-    clearInterval(this.intervalId);
-    this.isActive = false;
-    const countTime = this.convertMs(deltaTime);
-    this.onTick(countTime)
-    //  };
+      if(deltaTime <= 1000){  
+        clearInterval(this.intervalId);
+        this.isActive = false;
+        
+        startButton.disabled = false;
+      
+      };  
+    }, 1000);
+
+   
   }
 
   //   Для подсчета значений
@@ -156,7 +156,6 @@ onTick: updateClockface
 });
 
 startButton.addEventListener('click', timer.start.bind(timer));
-startButton.disabled = true;
 
 function updateClockface({ days, hours, minutes, seconds }) {
     day.textContent = `${days}`;
