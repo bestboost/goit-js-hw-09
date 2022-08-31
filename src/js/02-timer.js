@@ -26,7 +26,6 @@ const timerItemsStyle = () => {
     })
     
 }
-
 const timerValuesStyle = () => {
     timerValues.forEach(timerValue => {
         timerValue.style.fontSize = "30px";
@@ -78,7 +77,7 @@ inputTextarea.addEventListener('input', takeTargetDate)
 let targetDate = '';
 function takeTargetDate (event) {
     userDate = event.currentTarget.value;
-    targetDate = (Date.parse(userDate))
+    targetDate = Date.parse(userDate)
 
   if (targetDate <= timeNow) {
       
@@ -111,7 +110,7 @@ class Timer {
     this.intervalId = setInterval(() => {
       const currentTime = Date.now();
       const deltaTime = targetDate - currentTime;
-      console.log(deltaTime)
+
       const countTime = this.convertMs(deltaTime);
 
       this.onTick(countTime)
@@ -119,9 +118,7 @@ class Timer {
       if(deltaTime <= 1000){  
         clearInterval(this.intervalId);
         this.isActive = false;
-        
-        startButton.disabled = false;
-      
+     
       };  
     }, 1000);
 
