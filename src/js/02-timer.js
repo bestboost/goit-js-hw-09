@@ -72,7 +72,7 @@ const timeNow = Date.now();
 const inputTextarea = document.querySelector('input');
 const startButton = document.querySelector('[data-start]');
 
-startButton.disabled = false;
+startButton.disabled = true;
 
 inputTextarea.addEventListener('input', takeTargetDate)
 let targetDate = '';
