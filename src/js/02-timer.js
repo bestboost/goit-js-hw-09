@@ -75,6 +75,7 @@ startButton.disabled = true;
 
 inputTextarea.addEventListener('input', takeTargetDate)
 let targetDate = '';
+let userDate = '';
 function takeTargetDate (event) {
     userDate = event.currentTarget.value;
     targetDate = Date.parse(userDate)
